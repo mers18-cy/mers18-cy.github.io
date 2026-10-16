@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merlita Tepait | Portfolio</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+:root {
+  --bg-dark: #070603;
+  --gold-primary: #f3c262;
+  --gold-secondary: #b8860b;
+  --gold-glow: rgba(243, 194, 98, 0.4);
+  --card-bg: linear-gradient(180deg, rgba(25, 18, 8, 0.88) 0%, rgba(10, 8, 4, 0.96) 100%);
+  --card-border: rgba(212, 160, 23, 0.45);
+  --text-primary: #fefefe;
+  --text-secondary: #d1c2a5;
+}
+
+body {
+  background-color: var(--bg-dark);
+  background-image: 
+    radial-gradient(circle at 50% 20%, rgba(184, 134, 11, 0.22) 0%, transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(120, 80, 5, 0.18) 0%, transparent 60%);
+  color: var(--text-primary);
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Intro Touch Overlay Screen */
+#intro-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(7, 6, 3, 0.95);
+  backdrop-filter: blur(15px);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+#intro-screen.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.intro-card {
+  background: var(--card-bg);
+  border: 2px solid var(--gold-primary);
+  border-radius: 24px;
+  padding: 2.5rem;
+  text-align: center;
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 0 0 50px var(--gold-glow), inset 0 0 15px rgba(243, 194, 98, 0.2);
+  cursor: pointer;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  animation: pulseGlow 2.5s infinite alternate;
+}
+
+.intro-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 60px rgba(243, 194, 98, 0.6), inset 0 0 20px rgba(243, 194, 98, 0.3);
+}
+
+.intro-img {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--gold-primary);
+  margin-bottom: 1.2rem;
+  box-shadow: 0 0 30px var(--gold-primary);
+}
+
+.intro-card h1 {
+  font-size: 1.8rem;
+  color: #fff;
+  margin-bottom: 0.3rem;
+}
+
+.intro-card h1 span {
+  color: var(--gold-primary);
+}
+
+.intro-card p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 1.8rem;
+}
+
+.enter-btn {
+  display: inline-block;
+  padding: 0.8rem 2rem;
+  border-radius: 30px;
+  background: linear-gradient(180deg, #ffe082 0%, #c68a12 100%);
+  color: #1a1000;
+  font-weight: bold;
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  border: 1px solid #fff0a8;
+  box-shadow: 0 0 20px var(--gold-glow);
+  transition: all 0.3s ease;
+}
+
+.intro-card:hover .enter-btn {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px var(--gold-primary);
+}
+
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 30px var(--gold-glow); }
+  100% { box-shadow: 0 0 55px rgba(243, 194, 98, 0.7); }
+}
+
+/* Matrix Background Canvas */
+#matrix-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.35;
+}
+
+/* Header & Navigation */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(10, 8, 4, 0.88);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--card-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 3rem;
+  z-index: 1000;
+  box-shadow: 0 4px 25px rgba(0,0,0,0.85);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: var(--gold-primary);
+  letter-spacing: 1.5px;
+  text-shadow: 0 0 10px var(--gold-glow);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.logo:hover {
+  transform: translateY(-4px);
+}
+
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--gold-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  background: radial-gradient(circle, #3a2808 0%, #0c0a06 100%);
+  box-shadow: 0 0 10px var(--gold-glow);
+  transition: transform 0.3s ease;
+}
+
+.logo:hover .logo-icon {
+  transform: scale(1.1);
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 0.8rem;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #c0d1eb;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  padding: 0.5rem 1.3rem;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #1c2b42 0%, #0f1926 100%);
+  border: 1px solid rgba(100, 150, 220, 0.3);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.2), 0 4px 8px rgba(0,0,0,0.5);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: inline-block;
+}
+
+nav ul li a:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 15px rgba(100, 150, 220, 0.4), inset 0 1px 2px rgba(255,255,255,0.8);
+}
+
+nav ul li a.active {
+  color: #1a1000;
+  background: linear-gradient(180deg, #ffe082 0%, #c68a12 100%);
+  border-color: #fff0a8;
+  box-shadow: 0 0 15px var(--gold-glow), inset 0 1px 2px rgba(255,255,255,0.8);
+}
+
+/* Main Container */
+main {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 6.5rem 1.5rem 3rem 1.5rem;
+  flex-grow: 1;
+  z-index: 1;
+}
+
+.portfolio-section {
+  display: none; 
+}
+
+.portfolio-section.active-section {
+  display: block; 
+}
+
+h2 {
+  font-size: 1.3rem;
+  color: var(--gold-primary);
+  margin-bottom: 1rem;
+  text-shadow: 0 0 8px var(--gold-glow);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Dashboard Layout */
+.dashboard-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.hero-center {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.hero-center:hover {
+  transform: translateY(-4px);
+}
+
+.hero-img {
+  width: 155px;
+  height: 155px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--gold-primary);
+  margin-bottom: 0.8rem;
+  box-shadow: 0 0 35px var(--gold-primary), inset 0 0 15px rgba(0,0,0,0.8);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.hero-img:hover {
+  transform: scale(1.06);
+  box-shadow: 0 0 45px var(--gold-primary), inset 0 0 20px rgba(0,0,0,0.9);
+}
+
+.hero-center h1 {
+  font-size: 2rem;
+  color: #ffffff;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+}
+
+.hero-center h1 span {
+  color: var(--gold-primary);
+}
+
+.hero-center h3 {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+/* Metallic Cards */
+.education-card, .about-card, .skills-dashboard-card, .projects-dashboard-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 1.3rem;
+  box-shadow: inset 0 1px 1px rgba(255, 215, 0, 0.3), 0 8px 25px rgba(0, 0, 0, 0.8);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.education-card:hover, .about-card:hover, .skills-dashboard-card:hover, .projects-dashboard-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--gold-primary);
+  box-shadow: 0 12px 30px var(--gold-glow), inset 0 1px 3px rgba(255, 215, 0, 0.5);
+}
+
+.education-card::before, .about-card::before, .skills-dashboard-card::before, .projects-dashboard-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+}
+
+.education-card p {
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  margin-bottom: 0.4rem;
+}
+
+/* Dashboard Bottom Grid */
+.dashboard-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr 1fr;
+  gap: 1.5rem;
+}
+
+/* Decorative Gold Line Divider */
+.home-decorative-divider {
+  width: 100%;
+  margin-top: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.35s ease, filter 0.35s ease;
+}
+
+.home-decorative-divider:hover {
+  transform: translateY(-4px) scale(1.01);
+  filter: drop-shadow(0 0 12px var(--gold-primary));
+}
+
+.home-decorative-divider svg {
+  width: 100%;
+  max-width: 900px;
+  height: 35px;
+}
+
+/* Embedded Skills Grid inside Home */
+.home-skills-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.mini-skill-item {
+  background: rgba(15, 12, 6, 0.9);
+  border: 1px solid rgba(212, 160, 23, 0.3);
+  border-radius: 12px;
+  padding: 0.8rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  cursor: pointer;
+}
+
+.mini-skill-item:hover {
+  transform: translateY(-6px);
+  border-color: var(--gold-primary);
+  box-shadow: 0 8px 20px var(--gold-glow), inset 0 0 10px rgba(243, 194, 98, 0.2);
+}
+
+.mini-skill-logo {
+  width: 45px;
+  height: 45px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 0.4rem;
+  background: #fff;
+  padding: 3px;
+  transition: transform 0.3s ease;
+}
+
+.mini-skill-item:hover .mini-skill-logo {
+  transform: scale(1.08);
+}
+
+.mini-skill-item h4 {
+  color: var(--gold-primary);
+  font-size: 0.85rem;
+  margin-bottom: 0.3rem;
+}
+
+.mini-progress-bg {
+  width: 100%;
+  height: 6px;
+  background: #000;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.mini-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #b8860b, #f3c262);
+  transition: width 0.4s ease;
+}
+
+.skill-percentage {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* Contact Mini List */
+.contact-mini-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.contact-mini-item {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  padding: 0.4rem 0.6rem;
+  border-radius: 8px;
+  transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
+}
+
+.contact-mini-item:hover {
+  transform: translateY(-3px);
+  background: rgba(243, 194, 98, 0.1);
+  color: var(--text-primary);
+}
+
+.contact-mini-item strong {
+  color: var(--gold-primary);
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--card-border);
+  background: rgba(10, 8, 4, 0.9);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  z-index: 1;
+  transition: transform 0.3s ease;
+}
+
+footer:hover {
+  transform: translateY(-2px);
+}
+
+footer span {
+  color: var(--gold-primary);
+  font-weight: bold;
+}
+
+@media (max-width: 900px) {
+  .dashboard-top, .dashboard-bottom {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Touch Profile Intro Overlay -->
+<div id="intro-screen" onclick="enterPortfolio()">
+  <div class="intro-card">
+    <img src="https://uploads.onecompiler.io/4568a7gjv/1792053227702/Unknown-2.jpg" alt="Merlita Tepait" class="intro-img">
+    <h1><span>Merlita S. Tepait</span></h1>
+    <p>BS Computer Engineering Student | Web & Mobile Developer</p>
+    <div class="enter-btn">TOUCH TO ENTER</div>
+  </div>
+</div>
+
+<!-- Matrix Canvas Background -->
+<canvas id="matrix-canvas"></canvas>
+
+<!-- Header Navigation -->
+<header>
+  <div class="logo">
+    <div class="logo-icon">MT</div>
+    MERLITA T.
+  </div>
+  <nav>
+    <ul>
+      <li><a href="javascript:void(0);" onclick="showSection('home')" id="nav-home" class="active">HOME</a></li>
+      <li><a href="javascript:void(0);" onclick="showSection('about')" id="nav-about">ABOUT</a></li>
+      <li><a href="javascript:void(0);" onclick="showSection('skills')" id="nav-skills">SKILLS</a></li>
+      <li><a href="javascript:void(0);" onclick="showSection('projects')" id="nav-projects">PROJECTS</a></li>
+      <li><a href="javascript:void(0);" onclick="showSection('contact')" id="nav-contact">CONTACT</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <!-- Home Dashboard Section -->
+  <section id="home" class="portfolio-section active-section">
+    
+    <!-- Top Row: Hero Center & Education -->
+    <div class="dashboard-top">
+      <div class="hero-center">
+        <img src="https://uploads.onecompiler.io/4568a7gjv/1792053227702/Unknown-2.jpg" alt="Merlita Tepait" class="hero-img">
+        <h1>Hi, I'm <span>Merlita S. Tepait</span></h1>
+        <h3>Web/Mobile Developer / Hardware / BS Computer Engineering Student</h3>
+      </div>
+
+      <div class="education-card">
+        <h2>Education</h2>
+        <p><strong>School:</strong> ICCT Colleges</p>
+        <p><strong>Year Level:</strong> 4th Year</p>
+        <p><strong>Section:</strong> LFCA411A104</p>
+        <p><strong>Course:</strong> BS Computer Engineering</p>
+      </div>
+    </div>
+
+    <!-- Bottom Row: About Me, Skills, Projects & Contact Dashboard Grid -->
+    <div class="dashboard-bottom">
+      
+      <!-- About Box -->
+      <div class="about-card">
+        <h2>ABOUT ME</h2>
+        <p>I am Merlita Tepait, currently in my 4th year pursuing a BS in Computer Engineering at ICCT Colleges.</p>
+        <p>I like building websites, database connectivity, and solving logical challenges.</p>
+        <p>I'm continuously improving my programming and engineering skills through academic and practical web projects.</p>
+      </div>
+
+      <!-- Skills Box -->
+      <div class="skills-dashboard-card">
+        <h2>SKILLS</h2>
+        <div class="home-skills-grid">
+          <div class="mini-skill-item">
+            <img src="https://uploads.onecompiler.io/442nn5q5f/1791018847932/1000014186.jpg" class="mini-skill-logo" alt="HTML">
+            <h4>HTML</h4>
+            <div class="mini-progress-bg"><div class="mini-progress-fill" style="width:49%"></div></div>
+            <span class="skill-percentage">49%</span>
+          </div>
+          <div class="mini-skill-item">
+            <img src="https://uploads.onecompiler.io/442nn5q5f/1791019149765/1000014189.jpg" class="mini-skill-logo" alt="CSS">
+            <h4>CSS</h4>
+            <div class="mini-progress-bg"><div class="mini-progress-fill" style="width:47%"></div></div>
+            <span class="skill-percentage">47%</span>
+          </div>
+          <div class="mini-skill-item">
+            <img src="https://uploads.onecompiler.io/442nn5q5f/1791019144209/1000014183.png" class="mini-skill-logo" alt="JavaScript">
+            <h4>JAVASCRIPT</h4>
+            <div class="mini-progress-bg"><div class="mini-progress-fill" style="width:44%"></div></div>
+            <span class="skill-percentage">44%</span>
+          </div>
+          <div class="mini-skill-item">
+            <img src="https://uploads.onecompiler.io/442nn5q5f/1791019155046/1000014190.jpg" class="mini-skill-logo" alt="Database">
+            <h4>DATABASE</h4>
+            <div class="mini-progress-bg"><div class="mini-progress-fill" style="width:40%"></div></div>
+            <span class="skill-percentage">40%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Projects & Contact Box -->
+      <div class="projects-dashboard-card">
+        <h2>PROJECTS</h2>
+        <p style="font-size:0.85rem; color:var(--gold-primary);"><strong>E-BARANGAY SYSTEM</strong></p>
+        <p style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:1rem;">Web-based complaint management system.</p>
+
+        <h2>CONTACT</h2>
+        <div class="contact-mini-list">
+          <a href="mailto:merlitatepait8@gmail.com" class="contact-mini-item">
+            <strong>Email:</strong> merlitatepait8@gmail.com
+          </a>
+          <a href="https://github.com/mers18-cy" target="_blank" class="contact-mini-item">
+            <strong>GitHub:</strong> github.com/mers18-cy
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Decorative Gold Divider Line under Home Section -->
+    <div class="home-decorative-divider">
+      <svg viewBox="0 0 900 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0 17.5H350L380 5H520L550 17.5H900" stroke="url(#goldGrad)" stroke-width="2"/>
+        <path d="M100 17.5L120 28H780L800 17.5" stroke="#b8860b" stroke-width="1" stroke-dasharray="4 4"/>
+        <polygon points="450,0 462,12 450,24 438,12" fill="#f3c262" stroke="#b8860b" stroke-width="1"/>
+        <circle cx="380" cy="5" r="3" fill="#f3c262"/>
+        <circle cx="520" cy="5" r="3" fill="#f3c262"/>
+        <circle cx="350" cy="17.5" r="4" fill="#b8860b"/>
+        <circle cx="550" cy="17.5" r="4" fill="#b8860b"/>
+        <defs>
+          <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="transparent" />
+            <stop offset="20%" stop-color="#b8860b" />
+            <stop offset="50%" stop-color="#f3c262" />
+            <stop offset="80%" stop-color="#b8860b" />
+            <stop offset="100%" stop-color="transparent" />
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+
+  </section>
+
+  <!-- About Section Tab -->
+  <section id="about" class="portfolio-section">
+    <h2>ABOUT ME</h2>
+    <div class="about-card">
+      <p>I am Merlita Tepait, currently in my 4th year pursuing a Bachelor of Science in Computer Engineering at ICCT Colleges.</p>
+      <p>I like building websites and connecting them to databases, solving logical challenges, and working on web concepts.</p>
+      <p>I'm continuously improving my programming and engineering skills through academic and practical web projects.</p>
+    </div>
+  </section>
+
+  <!-- Skills Section Tab -->
+  <section id="skills" class="portfolio-section">
+    <h2>SKILLS</h2>
+    <div class="skills-dashboard-card">
+      <div class="home-skills-grid">
+        <div class="mini-skill-item">
+          <img src="https://uploads.onecompiler.io/442nn5q5f/1791018847932/1000014186.jpg" class="mini-skill-logo" alt="HTML">
+          <h4>HTML</h4>
+          <div class="mini-progress-bg"><div class="mini-progress-fill" style="width:49%"></div></div>
+          <span class="skill-percentage">49%</span>
+        </div>
+        <div class="mini-skill-item">
+          <img src="https://uploads.onecompiler.io/442nn5q5f/1791019149765/1000014189.jpg" class="mini-skill-logo" alt="CSS">
+          <h4>CSS</h4>
+          <div class="mini-progress-bg"><div class="mini-progress-fill" style="width:47%"></div></div>
+          <span class="skill-percentage">47%</span>
+        </div>
+        <div class="mini-skill-item">
+          <img src="https://uploads.onecompiler.io/442nn5q5f/1791019144209/1000014183.png" class="mini-skill-logo" alt="JavaScript">
+          <h4>JAVASCRIPT</h4>
+          <div class="mini-progress-bg"><div class="mini-progress-fill" style="width:44%"></div></div>
+          <span class="skill-percentage">44%</span>
+        </div>
+        <div class="mini-skill-item">
+          <img src="https://uploads.onecompiler.io/442nn5q5f/1791019155046/1000014190.jpg" class="mini-skill-logo" alt="Database">
+          <h4>DATABASE</h4>
+          <div class="mini-progress-bg"><div class="mini-progress-fill" style="width:40%"></div></div>
+          <span class="skill-percentage">40%</span>
+        </div>
+        <div class="mini-skill-item">
+          <img src="https://uploads.onecompiler.io/442nn5q5f/1791019159408/1000014185.png" class="mini-skill-logo" alt="GitHub">
+          <h4>GITHUB</h4>
+          <div class="mini-progress-bg"><div class="mini-progress-fill" style="width:35%"></div></div>
+          <span class="skill-percentage">35%</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Section Tab -->
+  <section id="projects" class="portfolio-section">
+    <h2>PROJECTS</h2>
+    <div class="about-card">
+      <h3>E-BARANGAY SYSTEM</h3>
+      <p style="margin-top: 0.5rem;"><strong>Description:</strong> A Web-Based Barangay Information and Complaint Management System designed to handle resident requests and tracking efficiently.</p>
+      <p style="color: var(--gold-primary); margin-top: 0.5rem;"><strong>Status:</strong> In Progress</p>
+    </div>
+  </section>
+
+  <!-- Contact Section Tab -->
+  <section id="contact" class="portfolio-section">
+    <h2>CONTACT ME</h2>
+    <div class="about-card">
+      <a href="mailto:merlitatepait8@gmail.com" class="contact-mini-item" style="margin-bottom:1rem;">
+        <strong>Email:</strong> merlitatepait8@gmail.com
+      </a>
+      <a href="https://github.com/mers18-cy" target="_blank" class="contact-mini-item">
+        <strong>GitHub:</strong> github.com/mers18-cy
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<!-- Footer -->
+<footer>
+  <p>Thanks for <span>Visiting!</span></p>
+</footer>
+
+<!-- JavaScript for Tab Switching, Intro Screen & Gold Matrix Rain Effect -->
+<script>
+function enterPortfolio() {
+  const introScreen = document.getElementById('intro-screen');
+  introScreen.classList.add('hidden');
+}
+
+function showSection(sectionId) {
+  const sections = document.querySelectorAll('.portfolio-section');
+  sections.forEach(sec => sec.classList.remove('active-section'));
+
+  const navLinks = document.querySelectorAll('nav ul li a');
+  navLinks.forEach(link => link.classList.remove('active'));
+
+  const targetSection = document.getElementById(sectionId);
+  if (targetSection) {
+    targetSection.classList.add('active-section');
+  }
+
+  const targetNav = document.getElementById('nav-' + sectionId);
+  if (targetNav) {
+    targetNav.classList.add('active');
+  }
+}
+
+// Matrix Digital Rain Animation with Gold Theme
+const canvas = document.getElementById('matrix-canvas');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+const letters = '0123456789ABCDEF';
+const fontSize = 14;
+let columns = Math.floor(canvas.width / fontSize);
+const drops = [];
+
+for (let i = 0; i < columns; i++) {
+  drops[i] = 1;
+}
+
+function drawMatrix() {
+  ctx.fillStyle = 'rgba(7, 6, 3, 0.15)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = '#f3c262';
+  ctx.font = fontSize + 'px monospace';
+
+  for (let i = 0; i < drops.length; i++) {
+    const text = letters.charAt(Math.floor(Math.random() * letters.length));
+    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+      drops[i] = 0;
+    }
+    drops[i]++;
+  }
+}
+
+setInterval(drawMatrix, 45);
+</script>
+
+</body>
+</html>
